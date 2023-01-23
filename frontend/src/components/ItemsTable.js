@@ -12,33 +12,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { Gif } from "@giphy/react-components";
-
-const data = [
-  {
-    name: "bag",
-    description: "A nice bag",
-    price: 25,
-    image_link: "3osxY7DmfDxTzQ0ZJ6",
-    material: "smirghel",
-    size: "medium",
-  },
-  {
-    name: "chainsaw",
-    description: "A nice bag",
-    price: 25,
-    image_link: "1rQUB4Q3upIlImE1yI",
-    material: "smirghel",
-    size: "medium",
-  },
-  {
-    name: "old phone",
-    description: "A nice bag",
-    price: 25,
-    image_link: "Vb4ifejsKiL2U",
-    material: "smirghel",
-    size: "medium",
-  },
-];
+import { getItemsApi } from "../services/api";
 
 const giphyFetch = new GiphyFetch("ZZwspTwUirtTYIWRUtvgdijYFMZ1ZFc9");
 
@@ -120,12 +94,23 @@ const Row = ({ row, index }) => {
 };
 
 const ItemsTable = () => {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const getItems = async () => {
+      const response = await getItemsApi();
+      setItems(response);
+    };
+
+    getItems();
+  }, []);
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHeader />
         <TableBody>
-          {data.map((row, index) => (
+          {items.map((row, index) => (
             <Row row={row} index={index} />
           ))}
         </TableBody>
