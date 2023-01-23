@@ -1,5 +1,4 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
@@ -24,13 +23,68 @@ const createRow = (name, description, price, image_link, material, size) => {
   };
 };
 
-const Row = (props) => {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
+const rows = [
+  createRow(
+    "chair",
+    "a wooden chair",
+    24.56,
+    "https://giphy.com/embed/xTiTnwkIFg4M7ru2NW",
+    "canepa",
+    "medium"
+  ),
+  createRow(
+    "chair",
+    "a wooden chair",
+    24.56,
+    "https://giphy.com/embed/xTiTnwkIFg4M7ru2NW",
+    "canepa",
+    "medium"
+  ),
+  createRow(
+    "chair",
+    "a wooden chair",
+    24.56,
+    "https://giphy.com/embed/xTiTnwkIFg4M7ru2NW",
+    "canepa",
+    "medium"
+  ),
+  createRow(
+    "chair",
+    "a wooden chair",
+    24.56,
+    "https://giphy.com/embed/xTiTnwkIFg4M7ru2NW",
+    "canepa",
+    "medium"
+  ),
+];
 
+const TableHeader = () => {
+  return (
+    <TableHead>
+      <TableRow>
+        <TableCell />
+        <TableCell>Name</TableCell>
+        <TableCell align="right">Description</TableCell>
+        <TableCell align="right">Price $</TableCell>
+        <TableCell align="right">Material</TableCell>
+        <TableCell align="right">Size</TableCell>
+      </TableRow>
+    </TableHead>
+  );
+};
+
+const Row = ({ row, index }) => {
+  const [open, setOpen] = React.useState(false);
   return (
     <React.Fragment>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
+      <TableRow
+        sx={{
+          "& > *": {
+            borderBottom: "unset",
+            background: index % 2 === 0 ? "#f5f4f4" : "#fefeff",
+          },
+        }}
+      >
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -59,42 +113,14 @@ const Row = (props) => {
   );
 };
 
-const rows = [
-  createRow(
-    "chair",
-    "a wooden chair",
-    24.56,
-    "https://giphy.com/embed/xTiTnwkIFg4M7ru2NW",
-    "canepa",
-    "medium"
-  ),
-  createRow(
-    "chair",
-    "a wooden chair",
-    24.56,
-    "https://giphy.com/embed/xTiTnwkIFg4M7ru2NW",
-    "canepa",
-    "medium"
-  ),
-];
-
 const ItemsTable = () => {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Description</TableCell>
-            <TableCell align="right">Price $</TableCell>
-            <TableCell align="right">Material</TableCell>
-            <TableCell align="right">Size</TableCell>
-          </TableRow>
-        </TableHead>
+        <TableHeader />
         <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
+          {rows.map((row, index) => (
+            <Row row={row} index={index} />
           ))}
         </TableBody>
       </Table>
