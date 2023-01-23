@@ -12,10 +12,10 @@ export class Item_Details {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column('text')
   serial_number: string;
 
-  @Column()
+  @Column('text')
   lot_number: string;
 
   @OneToOne(() => Items, (items) => items.items_details)
