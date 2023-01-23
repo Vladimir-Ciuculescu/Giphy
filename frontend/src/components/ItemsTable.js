@@ -53,7 +53,7 @@ const GifComponent = ({ id }) => {
     fetchGif();
   }, []);
 
-  return gif && <Gif gif={gif} width={200} />;
+  return gif && <Gif gif={gif} width={250} height={250} />;
 };
 
 const TableHeader = () => {
