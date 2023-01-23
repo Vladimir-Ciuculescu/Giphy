@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
@@ -7,67 +7,73 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { GiphyFetch } from "@giphy/js-fetch-api";
+import { Gif } from "@giphy/react-components";
 
-const createRow = (name, description, price, image_link, material, size) => {
-  return {
-    name,
-    description,
-    price,
-    image_link,
-    material,
-    size,
-  };
-};
-
-const rows = [
-  createRow(
-    "chair",
-    "a wooden chair",
-    24.56,
-    "https://giphy.com/embed/xTiTnwkIFg4M7ru2NW",
-    "canepa",
-    "medium"
-  ),
-  createRow(
-    "chair",
-    "a wooden chair",
-    24.56,
-    "https://giphy.com/embed/xTiTnwkIFg4M7ru2NW",
-    "canepa",
-    "medium"
-  ),
-  createRow(
-    "chair",
-    "a wooden chair",
-    24.56,
-    "https://giphy.com/embed/xTiTnwkIFg4M7ru2NW",
-    "canepa",
-    "medium"
-  ),
-  createRow(
-    "chair",
-    "a wooden chair",
-    24.56,
-    "https://giphy.com/embed/xTiTnwkIFg4M7ru2NW",
-    "canepa",
-    "medium"
-  ),
+const data = [
+  {
+    name: "bag",
+    description: "A nice bag",
+    price: 25,
+    image_link: "3osxY7DmfDxTzQ0ZJ6",
+    material: "smirghel",
+    size: "medium",
+  },
+  {
+    name: "chainsaw",
+    description: "A nice bag",
+    price: 25,
+    image_link: "1rQUB4Q3upIlImE1yI",
+    material: "smirghel",
+    size: "medium",
+  },
+  {
+    name: "old phone",
+    description: "A nice bag",
+    price: 25,
+    image_link: "Vb4ifejsKiL2U",
+    material: "smirghel",
+    size: "medium",
+  },
 ];
+
+const giphyFetch = new GiphyFetch("ZZwspTwUirtTYIWRUtvgdijYFMZ1ZFc9");
+
+const GifComponent = ({ id }) => {
+  const [gif, setGif] = useState(null);
+
+  useEffect(() => {
+    async function fetchGif() {
+      const { data } = await giphyFetch.gif(id);
+      setGif(data);
+    }
+    fetchGif();
+  }, []);
+
+  return gif && <Gif gif={gif} width={200} />;
+};
 
 const TableHeader = () => {
   return (
-    <TableHead>
+    <TableHead sx={{ background: "black" }}>
       <TableRow>
         <TableCell />
-        <TableCell>Name</TableCell>
-        <TableCell align="right">Description</TableCell>
-        <TableCell align="right">Price $</TableCell>
-        <TableCell align="right">Material</TableCell>
-        <TableCell align="right">Size</TableCell>
+        <TableCell sx={{ color: "white" }}>Name</TableCell>
+        <TableCell sx={{ color: "white" }} align="right">
+          Description
+        </TableCell>
+        <TableCell sx={{ color: "white" }} align="right">
+          Price $
+        </TableCell>
+        <TableCell sx={{ color: "white" }} align="right">
+          Material
+        </TableCell>
+        <TableCell sx={{ color: "white" }} align="right">
+          Size
+        </TableCell>
       </TableRow>
     </TableHead>
   );
@@ -105,7 +111,7 @@ const Row = ({ row, index }) => {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Typography>Information to display</Typography>
+            <GifComponent id={row.image_link} />
           </Collapse>
         </TableCell>
       </TableRow>
@@ -119,7 +125,7 @@ const ItemsTable = () => {
       <Table aria-label="collapsible table">
         <TableHeader />
         <TableBody>
-          {rows.map((row, index) => (
+          {data.map((row, index) => (
             <Row row={row} index={index} />
           ))}
         </TableBody>

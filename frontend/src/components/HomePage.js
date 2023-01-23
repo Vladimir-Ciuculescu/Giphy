@@ -6,7 +6,7 @@ import CollapsibleTable from "./ItemsTable";
 const HomePage = () => {
   return (
     <Container maxWidth={false} sx={{ width: "85%", mt: 6 }}>
-      <Grid container direction="column" rowGap={2}>
+      <Grid container direction="column" rowGap={4}>
         <Grid item xs={12} md={12} lg={12} sx={{ background: "#4a148c" }}>
           <Typography
             sx={{
