@@ -14,9 +14,8 @@ export class ItemDetailsController {
   }
 
   @Post('/add')
-  @UsePipes(ValidationPipe)
-  async addItemDetails(@Body() itemDetailsDto: ItemDetailsDto) {
-    return await this.itemDetailsService.addItemDetails(itemDetailsDto);
+  async addItemDetails(id: number) {
+    return await this.itemDetailsService.addItemDetails(id);
   }
 
   @Put('/:id')
