@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AssignCategoryDto } from 'src/dto/assign_category.dto';
 import { ItemDto } from 'src/dto/item.dto';
 import { Items } from 'src/entities';
 import { Repository } from 'typeorm';
@@ -45,6 +46,14 @@ export class ItemsService {
     return item;
   }
 
+  async getItemCategories(id: number) {
+    return await this.itemsRepository
+      .createQueryBuilder('items')
+      .leftJoinAndSelect('items.categories', 'categories')
+      .where('items.id = :id', { id })
+      .getOne();
+  }
+
   async addItem(item: ItemDto) {
     const { name, description, price, image_link, material, size } = item;
 
@@ -65,6 +74,16 @@ export class ItemsService {
     //   .execute();
 
     return await this.itemsDetailsService.addItemDetails(addedItem.id);
+  }
+
+  async assignItemCategory(assignCategoryDto: AssignCategoryDto) {
+    const { itemId, categoryId } = assignCategoryDto;
+
+    return await this.itemsRepository
+      .createQueryBuilder()
+      .relation(Items, 'categories')
+      .of(itemId)
+      .add(categoryId);
   }
 
   async updateItem(id: number, item: ItemDto) {
