@@ -12,7 +12,6 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { Gif } from "@giphy/react-components";
-import { getItemsApi } from "../services/api";
 import { Box, Typography } from "@mui/material";
 
 const giphyFetch = new GiphyFetch("ZZwspTwUirtTYIWRUtvgdijYFMZ1ZFc9");
@@ -111,9 +110,8 @@ const ItemsTable = ({ items }) => {
       <Table aria-label="collapsible table">
         <TableHeader />
         <TableBody>
-          {items.map((row, index) => (
-            <Row row={row} index={index} />
-          ))}
+          {items.length !== 0 &&
+            items.map((row, index) => <Row row={row} index={index} />)}
         </TableBody>
       </Table>
     </TableContainer>

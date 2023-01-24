@@ -45,6 +45,13 @@ const HomePage = () => {
         <Grid item xs={12} md={12} lg={12}>
           <ItemsTable items={items} />
         </Grid>
+        {items.length === 0 && (
+          <Grid item xs={12} md={12} lg={12}>
+            <Typography sx={{ textAlign: "center" }}>
+              There are no results found !
+            </Typography>
+          </Grid>
+        )}
       </Grid>
     </Container>
   );
