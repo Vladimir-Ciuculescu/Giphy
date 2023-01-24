@@ -1,6 +1,8 @@
 import {
+  BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -14,8 +16,8 @@ export enum size_enum {
   large = 'large',
 }
 
-@Entity()
-export class Items {
+@Entity({ name: 'items'})
+export class Items extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -46,6 +48,7 @@ export class Items {
   })
   categories: Categories[];
 
-  @OneToOne(() => Item_Details, (item_details) => item_details.items)
+  @OneToOne(() => Item_Details, { cascade: true})
+  @JoinColumn({ name: 'item_id' })
   items_details: Item_Details;
 }

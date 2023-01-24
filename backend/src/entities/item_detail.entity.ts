@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   JoinColumn,
@@ -7,8 +8,8 @@ import {
 } from 'typeorm';
 import { Items } from './item.entity';
 
-@Entity({ name: 'items_details' })
-export class Item_Details {
+@Entity({ name: 'item_details' })
+export class Item_Details extends BaseEntity{
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,7 +19,4 @@ export class Item_Details {
   @Column('text')
   lot_number: string;
 
-  @OneToOne(() => Items, (items) => items.items_details)
-  @JoinColumn({ name: 'item_id' })
-  items: Items;
 }

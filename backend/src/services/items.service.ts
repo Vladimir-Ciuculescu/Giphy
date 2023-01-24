@@ -1,19 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ItemDto } from 'src/dto/item.dto';
 import { Items } from 'src/entities';
 import { Repository } from 'typeorm';
+
+import { ItemDetailsService } from './item_details.service';
 
 @Injectable()
 export class ItemsService {
   constructor(
     @InjectRepository(Items)
     private readonly itemsRepository: Repository<Items>,
+    @Inject(ItemDetailsService)
+    private readonly itemsDetailsService: ItemDetailsService,
   ) {}
 
-  async getItems() {
-    const items = await this.itemsRepository.find();
-    return items;
+  async getItems(searchParams) {
+    const { name, serial_number, lot_number } = searchParams;
+
+    const query = await this.itemsRepository
+      .createQueryBuilder('items')
+      .leftJoinAndSelect('items.items_details', 'items_details');
+
+    if (name) {
+      query.andWhere('items.name = :name', { name });
+    }
+
+    return query.getMany();
+    // const items = await this.itemsRepository.find();
+    // return items;
   }
 
   async getItemById(id: number) {
@@ -32,12 +47,24 @@ export class ItemsService {
 
   async addItem(item: ItemDto) {
     const { name, description, price, image_link, material, size } = item;
-    return await this.itemsRepository
-      .createQueryBuilder()
-      .insert()
-      .into(Items)
-      .values([{ name, description, price, image_link, material, size }])
-      .execute();
+
+    const addedItem = new Items();
+    addedItem.name = name;
+    addedItem.description = description;
+    addedItem.price = price;
+    addedItem.image_link = image_link;
+    addedItem.material = material;
+    addedItem.size = size;
+    await addedItem.save();
+
+    // const itemData = await this.itemsRepository
+    //   .createQueryBuilder()
+    //   .insert()
+    //   .into(Items)
+    //   .values([{ name, description, price, image_link, material, size }])
+    //   .execute();
+
+    return await this.itemsDetailsService.addItemDetails(addedItem.id);
   }
 
   async updateItem(id: number, item: ItemDto) {
