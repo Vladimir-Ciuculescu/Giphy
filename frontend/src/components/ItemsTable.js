@@ -13,6 +13,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { Gif } from "@giphy/react-components";
 import { getItemsApi } from "../services/api";
+import { Box, Typography } from "@mui/material";
 
 const giphyFetch = new GiphyFetch("ZZwspTwUirtTYIWRUtvgdijYFMZ1ZFc9");
 
@@ -85,7 +86,21 @@ const Row = ({ row, index }) => {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <GifComponent id={row.image_link} />
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <GifComponent id={row.image_link} />
+              <Box
+                sx={{
+                  pl: 5,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  gap: 4,
+                }}
+              >
+                <Typography>Serial number: </Typography>
+                <Typography>Lot number: </Typography>
+              </Box>
+            </Box>
           </Collapse>
         </TableCell>
       </TableRow>
