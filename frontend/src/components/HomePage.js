@@ -10,8 +10,9 @@ const HomePage = () => {
 
   useEffect(() => {
     const getItems = async () => {
-      const response = await getItemsApi();
-      setItems(response);
+      const { data } = await getItemsApi({});
+
+      setItems(data);
     };
 
     getItems();

@@ -93,8 +93,12 @@ const Row = ({ row, index }) => {
                   gap: 4,
                 }}
               >
-                <Typography>Serial number: </Typography>
-                <Typography>Lot number: </Typography>
+                <Typography>
+                  Serial number:{row.items_details.serial_number}
+                </Typography>
+                <Typography>
+                  Lot number:{row.items_details.lot_number}
+                </Typography>
               </Box>
             </Box>
           </Collapse>
