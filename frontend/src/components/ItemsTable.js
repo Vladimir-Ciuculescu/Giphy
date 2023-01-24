@@ -105,18 +105,7 @@ const Row = ({ row, index }) => {
   );
 };
 
-const ItemsTable = () => {
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    const getItems = async () => {
-      const response = await getItemsApi();
-      setItems(response);
-    };
-
-    getItems();
-  }, []);
-
+const ItemsTable = ({ items }) => {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">

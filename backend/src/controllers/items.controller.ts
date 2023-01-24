@@ -6,10 +6,12 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ItemDto } from 'src/dto/item.dto';
+import { SearchParamsDto } from 'src/dto/search_item.dto';
 import { ItemsService } from 'src/services/items.service';
 
 @Controller('items')
@@ -18,8 +20,8 @@ export class ItemsController {
 
   //Get all items
   @Get()
-  async getItems() {
-    const items = await this.itemsService.getItems();
+  async getItems(@Query(ValidationPipe) searchParamsDto: SearchParamsDto) {
+    const items = await this.itemsService.getItems(searchParamsDto);
     return items;
   }
 

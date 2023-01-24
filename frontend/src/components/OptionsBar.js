@@ -1,7 +1,8 @@
 import { Box, InputBase } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
+import axios from "axios";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -43,7 +44,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const OptionsBar = () => {
+const OptionsBar = ({ handleData }) => {
+  const [name, setName] = useState("");
+
+  const handlePress = async (e) => {
+    //If Enter key pressed
+    if (e.keyCode === 13) {
+      await searchItems();
+    }
+  };
+
+  const searchItems = async () => {
+    const { data } = await axios.get("/items", {
+      params: { ...(name ? { name } : {}) },
+    });
+    handleData(data);
+  };
+
   return (
     <Box sx={{ display: "fkex", flexDirection: "row" }}>
       <Search>
@@ -51,6 +68,10 @@ const OptionsBar = () => {
           <SearchIcon />
         </SearchIconWrapper>
         <StyledInputBase
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={handlePress}
+          enter
           placeholder="Name"
           inputProps={{ "aria-label": "search" }}
         />
@@ -60,7 +81,7 @@ const OptionsBar = () => {
           <SearchIcon />
         </SearchIconWrapper>
         <StyledInputBase
-          placeholder="Serail number"
+          placeholder="Serial number"
           inputProps={{ "aria-label": "search" }}
         />
       </Search>

@@ -11,9 +11,18 @@ export class ItemsService {
     private readonly itemsRepository: Repository<Items>,
   ) {}
 
-  async getItems() {
-    const items = await this.itemsRepository.find();
-    return items;
+  async getItems(searchParams) {
+    const { name, serial_number, lot_number } = searchParams;
+
+    const query = await this.itemsRepository.createQueryBuilder('items');
+
+    if (name) {
+      query.andWhere('items.name = :name', { name });
+    }
+
+    return query.getMany();
+    // const items = await this.itemsRepository.find();
+    // return items;
   }
 
   async getItemById(id: number) {
