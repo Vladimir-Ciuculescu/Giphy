@@ -1,9 +1,26 @@
 import { Grid, Typography } from "@mui/material";
 import { Container } from "@mui/system";
-import React from "react";
-import CollapsibleTable from "./ItemsTable";
+import React, { useEffect, useState } from "react";
+import { getItemsApi } from "../services/api";
+import ItemsTable from "./ItemsTable";
+import OptionsBar from "./OptionsBar";
 
 const HomePage = () => {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const getItems = async () => {
+      const response = await getItemsApi();
+      setItems(response);
+    };
+
+    getItems();
+  }, []);
+
+  const handleData = (e) => {
+    setItems(e);
+  };
+
   return (
     <Container maxWidth={false} sx={{ width: "85%", mt: 6 }}>
       <Grid container direction="column" rowGap={4}>
@@ -23,8 +40,18 @@ const HomePage = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <CollapsibleTable />
+          <OptionsBar handleData={handleData} />
         </Grid>
+        <Grid item xs={12} md={12} lg={12}>
+          <ItemsTable items={items} />
+        </Grid>
+        {items.length === 0 && (
+          <Grid item xs={12} md={12} lg={12}>
+            <Typography sx={{ textAlign: "center" }}>
+              There are no results found !
+            </Typography>
+          </Grid>
+        )}
       </Grid>
     </Container>
   );

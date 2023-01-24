@@ -27,8 +27,9 @@ export class ItemDetailsService {
 
     return await this.itemDetailsRepository
       .createQueryBuilder()
-      .relation(Items, "items_details")
-      .of(id).set(itemDetails);
+      .relation(Items, 'items_details')
+      .of(id)
+      .set(itemDetails);
 
     // return await this.itemDetailsRepository
     //   .createQueryBuilder()
