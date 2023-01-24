@@ -1,9 +1,10 @@
-import { Box, InputBase } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Button, InputBase } from "@mui/material";
+import React, { useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
-import axios from "axios";
 import { getItemsApi } from "../services/api";
+import AddIcon from "@mui/icons-material/Add";
+import AddItemModal from "./AddItemModal";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -49,6 +50,7 @@ const OptionsBar = ({ handleData }) => {
   const [name, setName] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
   const [lotNumber, setLotNumber] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handlePress = async (e) => {
     //If Enter key pressed
@@ -78,6 +80,10 @@ const OptionsBar = ({ handleData }) => {
       default:
         return;
     }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const searchItems = async () => {
@@ -129,6 +135,14 @@ const OptionsBar = ({ handleData }) => {
           inputProps={{ "aria-label": "search" }}
         />
       </Search>
+      <Button
+        onClick={() => setOpen(true)}
+        variant="contained"
+        startIcon={<AddIcon />}
+      >
+        Add a new item
+      </Button>
+      <AddItemModal open={open} handleClose={handleClose} />
     </Box>
   );
 };
