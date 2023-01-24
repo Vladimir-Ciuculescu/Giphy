@@ -60,10 +60,7 @@ const Row = ({ row, index }) => {
     <React.Fragment>
       <TableRow
         sx={{
-          "& > *": {
-            borderBottom: "unset",
-            background: index % 2 === 0 ? "#f5f4f4" : "#fefeff",
-          },
+          background: index % 2 === 0 ? "#f5f4f4" : "#fefeff",
         }}
       >
         <TableCell>

@@ -2,6 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
 import CollapsibleTable from "./ItemsTable";
+import OptionsBar from "./OptionsBar";
 
 const HomePage = () => {
   return (
@@ -21,6 +22,9 @@ const HomePage = () => {
           >
             Items table
           </Typography>
+        </Grid>
+        <Grid item xs={12} md={12} lg={12}>
+          <OptionsBar />
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <CollapsibleTable />
