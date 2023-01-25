@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import Textarea from "@mui/joy/Textarea";
-import { addItemApi } from "../services/api";
+import { addItemApi, editItemApi, getAllCategoriesApi } from "../services/api";
 import { AppContext } from "../App";
 
 const sizes = [
@@ -31,20 +31,28 @@ const sizes = [
 
 const ItemModal = ({ open, onClose }) => {
   const { modalMode, item, setOpenModal, openModal } = useContext(AppContext);
+  const [id, setId] = useState(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
   const [material, setMaterial] = useState("");
   const [size, setSize] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState([]);
+  const [serialNumber, setSerialNumber] = useState("");
+  const [lotNumber, setLotNumber] = useState("");
   const [imageLink, setImageLink] = useState("");
 
   useEffect(() => {
     if (modalMode === "edit") {
+      setId(item.id);
       setName(item.name);
       setPrice(item.price);
       setMaterial(item.material);
       setSize(item.size);
       setDescription(item.description);
+      setCategory(item.categories);
+      setSerialNumber(item.items_details.serial_number);
+      setLotNumber(item.items_details.lot_number);
       setImageLink(item.image_link);
     } else {
       clearForm();
@@ -57,6 +65,9 @@ const ItemModal = ({ open, onClose }) => {
     setMaterial("");
     setSize("");
     setDescription("");
+    setCategory("");
+    setSerialNumber("");
+    setLotNumber("");
     setImageLink("");
   };
 
@@ -70,6 +81,23 @@ const ItemModal = ({ open, onClose }) => {
       image_link: imageLink,
     };
     await addItemApi(item);
+    clearForm();
+    onClose();
+  };
+
+  const editItem = async () => {
+    const item = {
+      id,
+      name,
+      price,
+      material,
+      size,
+      description,
+      image_link: imageLink,
+      serial_number: serialNumber,
+      lot_number: lotNumber,
+    };
+    await editItemApi(id, item);
     clearForm();
     onClose();
   };
@@ -140,18 +168,38 @@ const ItemModal = ({ open, onClose }) => {
           />
         </Grid>
 
-        <Grid item md={12}>
+        <Grid item md={12} mb={2}>
           <Textarea
             placeholder="Add item description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
         </Grid>
+                
+        {modalMode === "edit" && 
+          <Grid container>
+            <Grid item md={12} mb={2}>
+              <Textarea
+                placeholder="Serial number"
+                value={serialNumber}
+                onChange={(e) => setSerialNumber(e.target.value)}
+              />
+            </Grid>
+
+            <Grid item md={12}>
+              <Textarea
+                placeholder="Lot number"
+                value={lotNumber}
+                onChange={(e) => setLotNumber(e.target.value)}
+              />
+            </Grid>
+          </Grid>
+        }
       </DialogContent>
       <DialogActions>
         <Button onClick={cancel}>Cancel</Button>
         {modalMode === "edit" ? (
-          <Button onClick={addItem}>Save</Button>
+          <Button onClick={editItem}>Save</Button>
         ) : (
           <Button onClick={addItem}>Add</Button>
         )}

@@ -19,4 +19,10 @@ export class ItemDto {
 
   @IsNotEmpty()
   size: size_enum;
+
+  @IsNotEmpty()
+  serial_number: string;
+
+  @IsNotEmpty()
+  lot_number: string;
 }
