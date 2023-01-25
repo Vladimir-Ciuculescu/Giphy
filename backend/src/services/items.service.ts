@@ -87,21 +87,23 @@ export class ItemsService {
   }
 
   async updateItem(id: number, item: ItemDto) {
-    const { name, description } = item;
+    const { name, description, price, image_link, material, size } = item;
     return await this.itemsRepository
       .createQueryBuilder()
       .update(Items)
-      .set({ name: name, description: description })
+      .set({ name: name, description: description, price: price, image_link: image_link, material: material, size: size })
       .where('id =:id', { id: id })
       .execute();
   }
 
   async deleteItem(id: number) {
-    return await this.itemsRepository
+    await this.itemsRepository
       .createQueryBuilder()
       .delete()
       .from(Items)
       .where('id = :id', { id: id })
       .execute();
+    
+    return await this.itemsDetailsService.deleteItemDetails(id);
   }
 }
