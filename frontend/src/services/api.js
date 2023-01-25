@@ -31,3 +31,9 @@ export const addCategoryApi = async (category) => {
   const addedCategory = await axios.post("/categories/add", category);
   return addedCategory;
 };
+
+export const deleteCategoryApi = async (id) => {
+  const deletedCategory = await axios.delete(`/categories/${id}`);
+
+  return deletedCategory;
+};
