@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { ItemDto } from 'src/dto/item.dto';
 import { SearchParamsDto } from 'src/dto/search_item.dto';
+import { AssignCategoryDto } from 'src/dto/assign_category.dto'
 import { ItemsService } from 'src/services/items.service';
 
 @Controller('items')
@@ -40,11 +41,24 @@ export class ItemsController {
     return item;
   }
 
+  //Get all categories for an item with ID
+  @Get('/:id/categories')
+  async getItemCategories(@Param('id') id: number) {
+    return await this.itemsService.getItemCategories(id);
+  }
+
   //Add a new item with body data
   @Post('/add')
   @UsePipes(ValidationPipe)
   async addItem(@Body() addItemDto: ItemDto) {
     return await this.itemsService.addItem(addItemDto);
+  }
+
+   //Add a category to item with IDs
+  @Put()
+  @UsePipes(ValidationPipe)
+  async assignItemCategory(@Body() assignCategoryDto : AssignCategoryDto) {
+    return await this.itemsService.assignItemCategory(assignCategoryDto);
   }
 
   //Update an item after id with body data

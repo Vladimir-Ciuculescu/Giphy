@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AssignCategoryDto } from 'src/dto/assign_category.dto';
 import { ItemDto } from 'src/dto/item.dto';
 import { Items } from 'src/entities';
 import { Repository } from 'typeorm';
@@ -26,6 +27,18 @@ export class ItemsService {
       query.andWhere('items.name = :name', { name });
     }
 
+    if (serial_number) {
+      query.andWhere('items_details.serial_number  = :serial_number', {
+        serial_number,
+      });
+    }
+
+    if (lot_number) {
+      query.andWhere('items_details.lot_number  = :lot_number', {
+        lot_number,
+      });
+    }
+
     return query.getMany();
     // const items = await this.itemsRepository.find();
     // return items;
@@ -43,6 +56,14 @@ export class ItemsService {
       .getOne();
 
     return item;
+  }
+
+  async getItemCategories(id: number) {
+    return await this.itemsRepository
+      .createQueryBuilder('items')
+      .leftJoinAndSelect('items.categories', 'categories')
+      .where('items.id = :id', { id })
+      .getOne();
   }
 
   async addItem(item: ItemDto) {
@@ -67,22 +88,34 @@ export class ItemsService {
     return await this.itemsDetailsService.addItemDetails(addedItem.id);
   }
 
+  async assignItemCategory(assignCategoryDto: AssignCategoryDto) {
+    const { itemId, categoryId } = assignCategoryDto;
+
+    return await this.itemsRepository
+      .createQueryBuilder()
+      .relation(Items, 'categories')
+      .of(itemId)
+      .add(categoryId);
+  }
+
   async updateItem(id: number, item: ItemDto) {
-    const { name, description } = item;
+    const { name, description, price, image_link, material, size } = item;
     return await this.itemsRepository
       .createQueryBuilder()
       .update(Items)
-      .set({ name: name, description: description })
+      .set({ name: name, description: description, price: price, image_link: image_link, material: material, size: size })
       .where('id =:id', { id: id })
       .execute();
   }
 
   async deleteItem(id: number) {
-    return await this.itemsRepository
+    await this.itemsRepository
       .createQueryBuilder()
       .delete()
       .from(Items)
       .where('id = :id', { id: id })
       .execute();
+    
+    return await this.itemsDetailsService.deleteItemDetails(id);
   }
 }
