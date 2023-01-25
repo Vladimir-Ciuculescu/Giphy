@@ -18,6 +18,16 @@ export const addItemApi = async (item) => {
 };
 
 export const deleteItemApi = async (id) => {
-  const response = await axios.delete(`items/${id}`);
-  return response;
+  const deletedItem = await axios.delete(`items/${id}`);
+  return deletedItem;
+};
+
+export const getCategoriesApi = async () => {
+  const categories = await axios.get("/categories");
+  return categories;
+};
+
+export const addCategoryApi = async (category) => {
+  const addedCategory = await axios.post("/categories/add", category);
+  return addedCategory;
 };

@@ -1,25 +1,56 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
 } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../App";
+import { addCategoryApi, getCategoriesApi } from "../services/api";
+import Textarea from "@mui/joy/Textarea";
 
 const CategoryModal = () => {
   const { openCategoryModal, setOpenCategoryModal } = useContext(AppContext);
+  const [categories, setCategories] = useState([]);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const { data } = await getCategoriesApi();
+      setCategories(data);
+    };
+    if (openCategoryModal) {
+      getCategories();
+    } else {
+      setCategories([]);
+    }
+  }, [openCategoryModal]);
+
+  const addCategory = async () => {
+    const category = {
+      name: name,
+      description: description,
+    };
+
+    await addCategoryApi(category);
+  };
 
   return (
     <Dialog
       maxWidth={false}
       PaperProps={{
         sx: {
-          minHeight: "50vh",
-          maxHeight: "50vh",
-          width: "30%",
+          minHeight: "60vh",
+          maxHeight: "60vh",
+          width: "40%",
         },
       }}
       open={openCategoryModal}
@@ -35,12 +66,34 @@ const CategoryModal = () => {
           //ref={descriptionElementRef}
           tabIndex={-1}
         >
-          adaw
+          <List>
+            {categories.map((category) => (
+              <ListItem>
+                <ListItemText
+                  primary={category.name}
+                  secondary={category.description}
+                />
+              </ListItem>
+            ))}
+          </List>
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setOpenCategoryModal(false)}>Cancel</Button>
-        <Button onClick={() => setOpenCategoryModal(false)}>Subscribe</Button>
+      <DialogActions style={{ justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          <TextField
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          ></TextField>
+          <Textarea
+            placeholder="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </Box>
+        <Button variant="contained" onClick={addCategory}>
+          Add
+        </Button>
       </DialogActions>
     </Dialog>
   );
