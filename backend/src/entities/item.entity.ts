@@ -3,6 +3,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -43,8 +44,11 @@ export class Items extends BaseEntity {
   })
   size: size_enum;
 
-  @ManyToMany(() => Categories, (category) => category.items, {
-    onDelete: 'CASCADE',
+  @ManyToMany(() => Categories)
+  @JoinTable({
+    name: 'items_categories',
+    joinColumn: { name: 'item_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'category_id', referencedColumnName: 'id' },
   })
   categories: Categories[];
 

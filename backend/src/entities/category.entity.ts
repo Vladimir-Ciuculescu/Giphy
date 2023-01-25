@@ -1,8 +1,6 @@
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Items } from './item.entity';
@@ -17,12 +15,4 @@ export class Categories {
 
   @Column('text')
   description: string;
-
-  @ManyToMany(() => Items, (item) => item.categories)
-  @JoinTable({
-    name: 'items_categories',
-    joinColumn: { name: 'item_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'category_id', referencedColumnName: 'id' },
-  })
-  items: Items[];
 }
