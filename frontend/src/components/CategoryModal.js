@@ -91,7 +91,7 @@ const CategoryModal = () => {
       <DialogContent dividers={true}>
         <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
           <List>
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <ListItem
                 secondaryAction={
                   <IconButton

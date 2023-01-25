@@ -30,7 +30,8 @@ const sizes = [
 ];
 
 const ItemModal = () => {
-  const { modalMode, item, setOpenModal, openModal } = useContext(AppContext);
+  const { modalMode, item, setOpenModal, openModal, items, setItems } =
+    useContext(AppContext);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
   const [material, setMaterial] = useState("");

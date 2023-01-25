@@ -10,6 +10,7 @@ function App() {
   const [idItemToDelete, setIdItemToDelete] = useState(0);
   const [modalMode, setModalMode] = useState("");
   const [item, setItem] = useState({});
+  const [items, setItems] = useState([]);
 
   return (
     <AppContext.Provider
@@ -26,6 +27,8 @@ function App() {
         setItem,
         openCategoryModal,
         setOpenCategoryModal,
+        items,
+        setItems,
       }}
     >
       <HomePage />

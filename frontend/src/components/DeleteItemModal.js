@@ -11,12 +11,19 @@ import { AppContext } from "../App";
 import { deleteItemApi } from "../services/api";
 
 const DeleteItemModal = () => {
-  const { openDeleteModal, setOpenDeleteModal, idItemToDelete } =
-    useContext(AppContext);
+  const {
+    openDeleteModal,
+    setOpenDeleteModal,
+    idItemToDelete,
+    setItems,
+    items,
+  } = useContext(AppContext);
 
   const deleteItem = async () => {
     await deleteItemApi(idItemToDelete);
     setOpenDeleteModal(false);
+
+    setItems(items.filter((item) => item.id !== idItemToDelete));
   };
 
   return (
