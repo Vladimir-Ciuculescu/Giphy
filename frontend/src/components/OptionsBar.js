@@ -1,10 +1,11 @@
 import { Box, Button, InputBase } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import { getItemsApi } from "../services/api";
 import AddIcon from "@mui/icons-material/Add";
-import AddItemModal from "./AddItemModal";
+import ItemModal from "./ItemModal";
+import { AppContext } from "../App";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -50,7 +51,8 @@ const OptionsBar = ({ handleData }) => {
   const [name, setName] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
   const [lotNumber, setLotNumber] = useState("");
-  const [open, setOpen] = useState(false);
+
+  const { openModal, setOpenModal, setModalMode } = useContext(AppContext);
 
   const handlePress = async (e) => {
     //If Enter key pressed
@@ -82,10 +84,6 @@ const OptionsBar = ({ handleData }) => {
     }
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const searchItems = async () => {
     const params = {
       name: name,
@@ -94,6 +92,11 @@ const OptionsBar = ({ handleData }) => {
     };
     const { data } = await getItemsApi(params);
     handleData(data);
+  };
+
+  const openAddModal = () => {
+    setOpenModal(true);
+    setModalMode("add");
   };
 
   return (
@@ -136,17 +139,13 @@ const OptionsBar = ({ handleData }) => {
         />
       </Search>
       <Button
-        onClick={() => setOpen(true)}
+        onClick={openAddModal}
         variant="contained"
         startIcon={<AddIcon />}
       >
         Add a new item
       </Button>
-      <AddItemModal
-        open={open}
-        handleClose={handleClose}
-        handleData={handleData}
-      />
+      <ItemModal open={openModal} onClose={() => setOpenModal(false)} />
     </Box>
   );
 };

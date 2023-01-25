@@ -9,9 +9,10 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Textarea from "@mui/joy/Textarea";
 import { addItemApi } from "../services/api";
+import { AppContext } from "../App";
 
 const sizes = [
   {
@@ -28,13 +29,29 @@ const sizes = [
   },
 ];
 
-const AddItemModal = ({ open, handleClose }) => {
+const ItemModal = ({ open, onClose }) => {
+  const { modalMode, item, setOpenModal, openModal } = useContext(AppContext);
+  console.log(item);
+  console.log(modalMode);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
   const [material, setMaterial] = useState("");
   const [size, setSize] = useState("");
   const [description, setDescription] = useState("");
   const [imageLink, setImageLink] = useState("");
+
+  useEffect(() => {
+    if (modalMode === "edit") {
+      setName(item.name);
+      setPrice(item.price);
+      setMaterial(item.material);
+      setSize(item.size);
+      setDescription(item.description);
+      setImageLink(item.image_link);
+    } else {
+      clearForm();
+    }
+  }, [openModal, modalMode]);
 
   const clearForm = () => {
     setName("");
@@ -56,17 +73,19 @@ const AddItemModal = ({ open, handleClose }) => {
     };
     await addItemApi(item);
     clearForm();
-    handleClose();
+    onClose();
   };
 
   const cancel = () => {
     clearForm();
-    handleClose();
+    onClose();
   };
 
   return (
     <Dialog open={open} onClose={cancel}>
-      <DialogTitle>Add new item</DialogTitle>
+      <DialogTitle>
+        {modalMode === "edit" ? "Edit item" : "Add a new item"}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ mb: 2 }}>
           Add new item with all necessary info
@@ -133,10 +152,14 @@ const AddItemModal = ({ open, handleClose }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={cancel}>Cancel</Button>
-        <Button onClick={addItem}>Add</Button>
+        {modalMode === "edit" ? (
+          <Button onClick={addItem}>Save</Button>
+        ) : (
+          <Button onClick={addItem}>Add</Button>
+        )}
       </DialogActions>
     </Dialog>
   );
 };
 
-export default AddItemModal;
+export default ItemModal;

@@ -6,18 +6,23 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import { useContext } from "react";
+import { AppContext } from "../App";
 import { deleteItemApi } from "../services/api";
 
-const DeleteItemModal = ({ open, handleClose, itemId }) => {
+const DeleteItemModal = () => {
+  const { openDeleteModal, setOpenDeleteModal, idItemToDelete } =
+    useContext(AppContext);
+
   const deleteItem = async () => {
-    await deleteItemApi(itemId);
-    handleClose();
+    await deleteItemApi(idItemToDelete);
+    setOpenDeleteModal(false);
   };
 
   return (
     <Dialog
-      open={open}
-      onClose={handleClose}
+      open={openDeleteModal}
+      onClose={() => setOpenDeleteModal(false)}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -32,7 +37,7 @@ const DeleteItemModal = ({ open, handleClose, itemId }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={deleteItem}>Delete</Button>
-        <Button onClick={handleClose} autoFocus>
+        <Button onClick={() => setOpenDeleteModal(false)} autoFocus>
           Cancel
         </Button>
       </DialogActions>
