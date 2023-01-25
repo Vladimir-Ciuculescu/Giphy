@@ -16,3 +16,8 @@ export const addItemApi = async (item) => {
   const addedItem = await axios.post("/items/add", item);
   return addedItem;
 };
+
+export const deleteItemApi = async (id) => {
+  const response = await axios.delete(`items/${id}`);
+  return response;
+};

@@ -32,102 +32,105 @@ const GifComponent = ({ id }) => {
   return gif && <Gif gif={gif} width={250} height={250} />;
 };
 
-const TableHeader = () => {
-  return (
-    <TableHead sx={{ background: "black" }}>
-      <TableRow>
-        <TableCell />
-        <TableCell sx={{ color: "white" }}>Name</TableCell>
-        <TableCell sx={{ color: "white" }} align="right">
-          Description
-        </TableCell>
-        <TableCell sx={{ color: "white" }} align="right">
-          Price $
-        </TableCell>
-        <TableCell sx={{ color: "white" }} align="right">
-          Material
-        </TableCell>
-        <TableCell sx={{ color: "white" }} align="right">
-          Size
-        </TableCell>
-        <TableCell sx={{ color: "white" }} align="right">
-          Actions
-        </TableCell>
-      </TableRow>
-    </TableHead>
-  );
-};
+const ItemsTable = ({ items, openDeleteModal }) => {
+  const TableHeader = () => {
+    return (
+      <TableHead sx={{ background: "black" }}>
+        <TableRow>
+          <TableCell />
+          <TableCell sx={{ color: "white" }}>Name</TableCell>
+          <TableCell sx={{ color: "white" }} align="right">
+            Description
+          </TableCell>
+          <TableCell sx={{ color: "white" }} align="right">
+            Price $
+          </TableCell>
+          <TableCell sx={{ color: "white" }} align="right">
+            Material
+          </TableCell>
+          <TableCell sx={{ color: "white" }} align="right">
+            Size
+          </TableCell>
+          <TableCell sx={{ color: "white" }} align="right">
+            Actions
+          </TableCell>
+        </TableRow>
+      </TableHead>
+    );
+  };
 
-const Row = ({ row, index }) => {
-  const [open, setOpen] = React.useState(false);
-  return (
-    <React.Fragment>
-      <TableRow
-        sx={{
-          background: index % 2 === 0 ? "#f5f4f4" : "#fefeff",
-        }}
-      >
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell component="th" scope="row">
-          {row.name}
-        </TableCell>
-        <TableCell align="right">{row.description}</TableCell>
-        <TableCell align="right">{row.price}</TableCell>
-        <TableCell align="right">{row.material}</TableCell>
-        <TableCell align="right">{row.size}</TableCell>
-        <TableCell align="right">
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
+  const Row = ({ row, index }) => {
+    const [open, setOpen] = React.useState(false);
+    return (
+      <React.Fragment>
+        <TableRow
+          sx={{
+            background: index % 2 === 0 ? "#f5f4f4" : "#fefeff",
+          }}
+        >
+          <TableCell>
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
+          <TableCell component="th" scope="row">
+            {row.name}
+          </TableCell>
+          <TableCell align="right">{row.description}</TableCell>
+          <TableCell align="right">{row.price}</TableCell>
+          <TableCell align="right">{row.material}</TableCell>
+          <TableCell align="right">{row.size}</TableCell>
+          <TableCell align="right">
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
 
-              justifyContent: "flex-end",
-              gap: 2,
-            }}
-          >
-            <DeleteIcon sx={{ color: "red", cursor: "pointer" }} />
-            <CreateIcon sx={{ color: "blue", cursor: "pointer" }} />
-          </Box>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-              <GifComponent id={row.image_link} />
-              <Box
-                sx={{
-                  pl: 5,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  gap: 4,
-                }}
-              >
-                <Typography>
-                  Serial number:{row.items_details.serial_number}
-                </Typography>
-                <Typography>
-                  Lot number:{row.items_details.lot_number}
-                </Typography>
-              </Box>
+                justifyContent: "flex-end",
+                gap: 2,
+              }}
+            >
+              <DeleteIcon
+                onClick={() => openDeleteModal(row.id)}
+                sx={{ color: "red", cursor: "pointer" }}
+              />
+              <CreateIcon sx={{ color: "blue", cursor: "pointer" }} />
             </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-};
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <GifComponent id={row.image_link} />
+                <Box
+                  sx={{
+                    pl: 5,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    gap: 4,
+                  }}
+                >
+                  <Typography>
+                    Serial number:{row.items_details.serial_number}
+                  </Typography>
+                  <Typography>
+                    Lot number:{row.items_details.lot_number}
+                  </Typography>
+                </Box>
+              </Box>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      </React.Fragment>
+    );
+  };
 
-const ItemsTable = ({ items }) => {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
