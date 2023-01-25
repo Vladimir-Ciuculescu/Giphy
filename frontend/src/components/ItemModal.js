@@ -29,7 +29,7 @@ const sizes = [
   },
 ];
 
-const ItemModal = ({ open, onClose }) => {
+const ItemModal = () => {
   const { modalMode, item, setOpenModal, openModal } = useContext(AppContext);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
@@ -71,16 +71,16 @@ const ItemModal = ({ open, onClose }) => {
     };
     await addItemApi(item);
     clearForm();
-    onClose();
+    setOpenModal(false);
   };
 
   const cancel = () => {
     clearForm();
-    onClose();
+    setOpenModal(false);
   };
 
   return (
-    <Dialog open={open} onClose={cancel}>
+    <Dialog open={openModal} onClose={cancel}>
       <DialogTitle>
         {modalMode === "edit" ? "Edit item" : "Add a new item"}
       </DialogTitle>
