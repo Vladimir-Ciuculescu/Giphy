@@ -13,6 +13,8 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { Gif } from "@giphy/react-components";
 import { Box, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CreateIcon from "@mui/icons-material/Create";
 
 const giphyFetch = new GiphyFetch("ZZwspTwUirtTYIWRUtvgdijYFMZ1ZFc9");
 
@@ -48,6 +50,9 @@ const TableHeader = () => {
         <TableCell sx={{ color: "white" }} align="right">
           Size
         </TableCell>
+        <TableCell sx={{ color: "white" }} align="right">
+          Actions
+        </TableCell>
       </TableRow>
     </TableHead>
   );
@@ -78,6 +83,20 @@ const Row = ({ row, index }) => {
         <TableCell align="right">{row.price}</TableCell>
         <TableCell align="right">{row.material}</TableCell>
         <TableCell align="right">{row.size}</TableCell>
+        <TableCell align="right">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+
+              justifyContent: "flex-end",
+              gap: 2,
+            }}
+          >
+            <DeleteIcon sx={{ color: "red", cursor: "pointer" }} />
+            <CreateIcon sx={{ color: "blue", cursor: "pointer" }} />
+          </Box>
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

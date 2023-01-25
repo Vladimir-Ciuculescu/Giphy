@@ -14,6 +14,5 @@ export const getItemsApi = async (params) => {
 
 export const addItemApi = async (item) => {
   const addedItem = await axios.post("/items/add", item);
-
   return addedItem;
 };
