@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
@@ -13,6 +13,9 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { Gif } from "@giphy/react-components";
 import { Box, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CreateIcon from "@mui/icons-material/Create";
+import { AppContext } from "../App";
 
 const giphyFetch = new GiphyFetch("ZZwspTwUirtTYIWRUtvgdijYFMZ1ZFc9");
 
@@ -48,13 +51,37 @@ const TableHeader = () => {
         <TableCell sx={{ color: "white" }} align="right">
           Size
         </TableCell>
+        <TableCell sx={{ color: "white" }} align="right">
+          Actions
+        </TableCell>
       </TableRow>
     </TableHead>
   );
 };
 
 const Row = ({ row, index }) => {
-  const [open, setOpen] = React.useState(false);
+  const {
+    setOpenDeleteModal,
+    setIdItemToDelete,
+    setOpenModal,
+    openModal,
+    setModalMode,
+    modalMode,
+    setItem,
+  } = useContext(AppContext);
+
+  const openDeleteModal = (id) => {
+    setIdItemToDelete(id);
+    setOpenDeleteModal(true);
+  };
+
+  const openEditModal = (item) => {
+    setOpenModal(true);
+    setModalMode("edit");
+    setItem(item);
+  };
+
+  const [open, setOpen] = useState(false);
   return (
     <React.Fragment>
       <TableRow
@@ -78,6 +105,26 @@ const Row = ({ row, index }) => {
         <TableCell align="right">{row.price}</TableCell>
         <TableCell align="right">{row.material}</TableCell>
         <TableCell align="right">{row.size}</TableCell>
+        <TableCell align="right">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+
+              justifyContent: "flex-end",
+              gap: 2,
+            }}
+          >
+            <DeleteIcon
+              onClick={() => openDeleteModal(row.id)}
+              sx={{ color: "red", cursor: "pointer" }}
+            />
+            <CreateIcon
+              onClick={() => openEditModal(row)}
+              sx={{ color: "blue", cursor: "pointer" }}
+            />
+          </Box>
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -93,8 +140,12 @@ const Row = ({ row, index }) => {
                   gap: 4,
                 }}
               >
-                <Typography>Serial number: </Typography>
-                <Typography>Lot number: </Typography>
+                <Typography>
+                  Serial number:{row.items_details.serial_number}
+                </Typography>
+                <Typography>
+                  Lot number:{row.items_details.lot_number}
+                </Typography>
               </Box>
             </Box>
           </Collapse>

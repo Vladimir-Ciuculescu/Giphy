@@ -2,6 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { getItemsApi } from "../services/api";
+import DeleteItemModal from "./DeleteItemModal";
 import ItemsTable from "./ItemsTable";
 import OptionsBar from "./OptionsBar";
 
@@ -10,8 +11,9 @@ const HomePage = () => {
 
   useEffect(() => {
     const getItems = async () => {
-      const response = await getItemsApi();
-      setItems(response);
+      const { data } = await getItemsApi({});
+
+      setItems(data);
     };
 
     getItems();
@@ -53,6 +55,7 @@ const HomePage = () => {
           </Grid>
         )}
       </Grid>
+      <DeleteItemModal />
     </Container>
   );
 };

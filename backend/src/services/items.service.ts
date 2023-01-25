@@ -27,6 +27,18 @@ export class ItemsService {
       query.andWhere('items.name = :name', { name });
     }
 
+    if (serial_number) {
+      query.andWhere('items_details.serial_number  = :serial_number', {
+        serial_number,
+      });
+    }
+
+    if (lot_number) {
+      query.andWhere('items_details.lot_number  = :lot_number', {
+        lot_number,
+      });
+    }
+
     return query.getMany();
     // const items = await this.itemsRepository.find();
     // return items;
