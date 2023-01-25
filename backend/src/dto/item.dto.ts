@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { size_enum } from 'src/entities/item.entity';
 
 export class ItemDto {
@@ -21,8 +21,10 @@ export class ItemDto {
   size: size_enum;
 
   @IsNotEmpty()
+  @IsOptional()
   serial_number: string;
 
   @IsNotEmpty()
+  @IsOptional()
   lot_number: string;
 }
