@@ -142,7 +142,11 @@ const OptionsBar = ({ handleData }) => {
       >
         Add a new item
       </Button>
-      <AddItemModal open={open} handleClose={handleClose} />
+      <AddItemModal
+        open={open}
+        handleClose={handleClose}
+        handleData={handleData}
+      />
     </Box>
   );
 };

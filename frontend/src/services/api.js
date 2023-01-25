@@ -11,3 +11,9 @@ export const getItemsApi = async (params) => {
   });
   return response;
 };
+
+export const addItemApi = async (item) => {
+  const addedItem = await axios.post("/items/add", item);
+
+  return addedItem;
+};
