@@ -31,8 +31,6 @@ const sizes = [
 
 const ItemModal = ({ open, onClose }) => {
   const { modalMode, item, setOpenModal, openModal } = useContext(AppContext);
-  console.log(item);
-  console.log(modalMode);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
   const [material, setMaterial] = useState("");
@@ -55,7 +53,7 @@ const ItemModal = ({ open, onClose }) => {
 
   const clearForm = () => {
     setName("");
-    setPrice(null);
+    setPrice("");
     setMaterial("");
     setSize("");
     setDescription("");
