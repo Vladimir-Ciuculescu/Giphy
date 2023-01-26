@@ -43,6 +43,8 @@ const ItemModal = () => {
   const [lotNumber, setLotNumber] = useState("");
   const [imageLink, setImageLink] = useState("");
 
+  console.log("test");
+
   useEffect(() => {
     if (modalMode === "edit") {
       setId(item.id);
