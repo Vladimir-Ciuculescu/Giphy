@@ -8,10 +8,11 @@ import {
   Grid,
   MenuItem,
   TextField,
+  Select,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import Textarea from "@mui/joy/Textarea";
-import { addItemApi, editItemApi, getAllCategoriesApi } from "../services/api";
+import { addItemApi, assignCategoryApi, editItemApi, getAllCategoriesApi } from "../services/api";
 import { AppContext } from "../App";
 
 const sizes = [
@@ -37,6 +38,7 @@ const ItemModal = ({ open, onClose }) => {
   const [material, setMaterial] = useState("");
   const [size, setSize] = useState("");
   const [description, setDescription] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState([]);
   const [serialNumber, setSerialNumber] = useState("");
   const [lotNumber, setLotNumber] = useState("");
@@ -50,7 +52,7 @@ const ItemModal = ({ open, onClose }) => {
       setMaterial(item.material);
       setSize(item.size);
       setDescription(item.description);
-      setCategory(item.categories);
+      setCategory(item.categories.map(cat => cat.name));
       setSerialNumber(item.items_details.serial_number);
       setLotNumber(item.items_details.lot_number);
       setImageLink(item.image_link);
@@ -59,13 +61,26 @@ const ItemModal = ({ open, onClose }) => {
     }
   }, [openModal, modalMode]);
 
+  useEffect(() => {
+    getAllCategories();
+  }, [])
+
+  const getAllCategories = async () => {
+    const { data } = await getAllCategoriesApi();
+    setCategoryList(data);
+  };
+
+  const handleChange = (e) => {
+    setCategory(e);
+  };
+  
   const clearForm = () => {
     setName("");
     setPrice("");
     setMaterial("");
     setSize("");
     setDescription("");
-    setCategory("");
+    setCategory([]);
     setSerialNumber("");
     setLotNumber("");
     setImageLink("");
@@ -178,6 +193,22 @@ const ItemModal = ({ open, onClose }) => {
                 
         {modalMode === "edit" && 
           <Grid container>
+            <Grid item md={12} mb={2}>
+              <Select
+                multiple
+                value={category}
+                onChange={(e) => handleChange(e.target.value)}
+              >
+                {categoryList.map((cat) => (
+                  <MenuItem
+                    key={cat.name}
+                    value={cat.name}
+                  >
+                    {cat.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Grid>
             <Grid item md={12} mb={2}>
               <Textarea
                 placeholder="Serial number"
