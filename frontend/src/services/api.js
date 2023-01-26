@@ -37,3 +37,8 @@ export const deleteCategoryApi = async (id) => {
 
   return deletedCategory;
 };
+
+export const updateCategoryApi = async (id, data) => {
+  const updatedCategory = await axios.put(`/categories/${id}`, data);
+  return updatedCategory;
+};
