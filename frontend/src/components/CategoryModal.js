@@ -33,11 +33,7 @@ const CategoryModal = () => {
       const { data } = await getCategoriesApi();
       setCategories(data);
     };
-    if (openCategoryModal) {
-      getCategories();
-    } else {
-      setCategories([]);
-    }
+    getCategories();
   }, [openCategoryModal]);
 
   const clearForm = () => {
