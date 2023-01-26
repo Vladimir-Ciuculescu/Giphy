@@ -29,8 +29,9 @@ const sizes = [
   },
 ];
 
-const ItemModal = ({ open, onClose }) => {
-  const { modalMode, item, setOpenModal, openModal } = useContext(AppContext);
+const ItemModal = () => {
+  const { modalMode, item, setOpenModal, openModal, items, setItems } =
+    useContext(AppContext);
   const [id, setId] = useState(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
@@ -82,7 +83,7 @@ const ItemModal = ({ open, onClose }) => {
     };
     await addItemApi(item);
     clearForm();
-    onClose();
+    setOpenModal(false);
   };
 
   const editItem = async () => {
@@ -99,16 +100,16 @@ const ItemModal = ({ open, onClose }) => {
     };
     await editItemApi(id, item);
     clearForm();
-    onClose();
+    setOpenModal(false);
   };
 
   const cancel = () => {
     clearForm();
-    onClose();
+    setOpenModal(false);
   };
 
   return (
-    <Dialog open={open} onClose={cancel}>
+    <Dialog open={openModal} onClose={cancel}>
       <DialogTitle>
         {modalMode === "edit" ? "Edit item" : "Add a new item"}
       </DialogTitle>
@@ -175,8 +176,8 @@ const ItemModal = ({ open, onClose }) => {
             onChange={(e) => setDescription(e.target.value)}
           />
         </Grid>
-                
-        {modalMode === "edit" && 
+
+        {modalMode === "edit" && (
           <Grid container>
             <Grid item md={12} mb={2}>
               <Textarea
@@ -194,7 +195,7 @@ const ItemModal = ({ open, onClose }) => {
               />
             </Grid>
           </Grid>
-        }
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={cancel}>Cancel</Button>
