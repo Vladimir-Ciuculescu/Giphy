@@ -21,7 +21,8 @@ export class ItemsService {
 
     const query = await this.itemsRepository
       .createQueryBuilder('items')
-      .leftJoinAndSelect('items.items_details', 'items_details');
+      .leftJoinAndSelect('items.items_details', 'items_details')
+      .leftJoinAndSelect('items.categories', 'categories')
 
     if (name) {
       query.andWhere('items.name = :name', { name });
@@ -99,8 +100,12 @@ export class ItemsService {
   }
 
   async updateItem(id: number, item: ItemDto) {
-    const { name, description, price, image_link, material, size } = item;
-    return await this.itemsRepository
+    const { name, description, price, image_link, material, size, serial_number, lot_number } = item;
+    const itemDetails = {
+      serial_number: serial_number,
+      lot_number: lot_number,
+    };
+    await this.itemsRepository
       .createQueryBuilder()
       .update(Items)
       .set({
@@ -113,6 +118,8 @@ export class ItemsService {
       })
       .where('id =:id', { id: id })
       .execute();
+    
+    return await this.itemsDetailsService.updateItemDetails(id, itemDetails);
   }
 
   async deleteItem(id: number) {

@@ -146,6 +146,9 @@ const Row = ({ row, index }) => {
                 <Typography>
                   Lot number:{row.items_details.lot_number}
                 </Typography>
+                <Typography>
+                  Category:{row.categories.map((category) => category.name + " ")}
+                </Typography>
               </Box>
             </Box>
           </Collapse>
