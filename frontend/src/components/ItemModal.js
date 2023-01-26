@@ -12,7 +12,12 @@ import {
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import Textarea from "@mui/joy/Textarea";
-import { addItemApi, assignCategoryApi, editItemApi, getAllCategoriesApi } from "../services/api";
+import {
+  addItemApi,
+  assignCategoryApi,
+  editItemApi,
+  getAllCategoriesApi,
+} from "../services/api";
 import { AppContext } from "../App";
 
 const sizes = [
@@ -45,8 +50,6 @@ const ItemModal = () => {
   const [lotNumber, setLotNumber] = useState("");
   const [imageLink, setImageLink] = useState("");
 
-  console.log("test");
-
   useEffect(() => {
     if (modalMode === "edit") {
       setId(item.id);
@@ -55,7 +58,7 @@ const ItemModal = () => {
       setMaterial(item.material);
       setSize(item.size);
       setDescription(item.description);
-      setCategory(item.categories.map(cat => cat.name));
+      setCategory(item.categories.map((cat) => cat.name));
       setSerialNumber(item.items_details.serial_number);
       setLotNumber(item.items_details.lot_number);
       setImageLink(item.image_link);
@@ -66,7 +69,7 @@ const ItemModal = () => {
 
   useEffect(() => {
     getAllCategories();
-  }, [])
+  }, []);
 
   const getAllCategories = async () => {
     const { data } = await getAllCategoriesApi();
@@ -76,7 +79,7 @@ const ItemModal = () => {
   const handleChange = (e) => {
     setCategory(e);
   };
-  
+
   const clearForm = () => {
     setName("");
     setPrice("");
@@ -203,10 +206,7 @@ const ItemModal = () => {
                 onChange={(e) => handleChange(e.target.value)}
               >
                 {categoryList.map((cat) => (
-                  <MenuItem
-                    key={cat.name}
-                    value={cat.name}
-                  >
+                  <MenuItem key={cat.name} value={cat.name}>
                     {cat.name}
                   </MenuItem>
                 ))}
