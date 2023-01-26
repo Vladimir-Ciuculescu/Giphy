@@ -17,6 +17,11 @@ export const addItemApi = async (item) => {
   return addedItem;
 };
 
+export const editItemApi = async (id,item) => {
+  const editedItem = await axios.put(`/items/${id}`, item);
+  return editedItem;
+};
+
 export const deleteItemApi = async (id) => {
   const deletedItem = await axios.delete(`items/${id}`);
   return deletedItem;
@@ -42,3 +47,13 @@ export const updateCategoryApi = async (id, data) => {
   const updatedCategory = await axios.put(`/categories/${id}`, data);
   return updatedCategory;
 };
+
+export const getAllCategoriesApi = async () => {
+  const response = await axios.get("/categories");
+  return response;
+};
+
+export const assignCategoryApi = async (ids) => {
+  const addedCategory = await axios.put("/items", ids);
+  return addedCategory;
+}
