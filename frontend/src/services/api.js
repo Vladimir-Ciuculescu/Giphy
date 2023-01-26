@@ -51,4 +51,9 @@ export const updateCategoryApi = async (id, data) => {
 export const getAllCategoriesApi = async () => {
   const response = await axios.get("/categories");
   return response;
+};
+
+export const assignCategoryApi = async (ids) => {
+  const addedCategory = await axios.put("/items", ids);
+  return addedCategory;
 }
