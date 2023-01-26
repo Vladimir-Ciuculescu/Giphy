@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Dialog,
@@ -9,6 +10,7 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
   TextField,
 } from "@mui/material";
@@ -18,9 +20,11 @@ import {
   addCategoryApi,
   deleteCategoryApi,
   getCategoriesApi,
+  updateCategoryApi,
 } from "../services/api";
 import Textarea from "@mui/joy/Textarea";
 import CloseIcon from "@mui/icons-material/Close";
+import CreateIcon from "@mui/icons-material/Create";
 
 const CategoryModal = () => {
   const { openCategoryModal, setOpenCategoryModal } = useContext(AppContext);
@@ -67,6 +71,79 @@ const CategoryModal = () => {
     clearForm();
   };
 
+  const CategoryItem = ({ category }) => {
+    const [name, setName] = useState(category.name);
+    const [description, setDescription] = useState(category.description);
+    const [isEdit, setIsEdit] = useState(false);
+
+    const handlePress = async (e) => {
+      if (e.keyCode === 13) {
+        const payload = {
+          name: name,
+          description: description,
+        };
+
+        await updateCategoryApi(category.id, payload);
+        setIsEdit(false);
+      }
+    };
+
+    return (
+      <ListItem
+        secondaryAction={
+          <IconButton
+            onClick={() => deleteCategory(category.id)}
+            disableRipple
+            edge="end"
+            aria-label="delete"
+          >
+            <CloseIcon sx={{ color: "red" }} />
+          </IconButton>
+        }
+      >
+        <ListItemAvatar>
+          <IconButton disableRipple onClick={() => setIsEdit(true)}>
+            <CreateIcon sx={{ color: "blue" }} />
+          </IconButton>
+        </ListItemAvatar>
+        <ListItemText
+          primary={
+            isEdit ? (
+              <TextField
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={handlePress}
+                variant="standard"
+                InputProps={{
+                  disableUnderline: true,
+                }}
+                sx={{ border: "none" }}
+              />
+            ) : (
+              name
+            )
+          }
+          secondary={
+            isEdit ? (
+              <TextField
+                value={description}
+                onKeyDown={handlePress}
+                onChange={(e) => setDescription(e.target.value)}
+                variant="standard"
+                InputProps={{
+                  disableUnderline: true,
+                }}
+                sx={{ border: "none" }}
+              />
+            ) : (
+              description
+            )
+          }
+        />
+      </ListItem>
+    );
+  };
+
   return (
     <Dialog
       maxWidth={false}
@@ -88,23 +165,7 @@ const CategoryModal = () => {
         <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
           <List>
             {categories.map((category, index) => (
-              <ListItem
-                secondaryAction={
-                  <IconButton
-                    onClick={() => deleteCategory(category.id)}
-                    disableRipple
-                    edge="end"
-                    aria-label="delete"
-                  >
-                    <CloseIcon sx={{ color: "red" }} />
-                  </IconButton>
-                }
-              >
-                <ListItemText
-                  primary={category.name}
-                  secondary={category.description}
-                />
-              </ListItem>
+              <CategoryItem category={category} />
             ))}
           </List>
         </DialogContentText>

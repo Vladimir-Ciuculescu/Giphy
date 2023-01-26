@@ -103,7 +103,14 @@ export class ItemsService {
     return await this.itemsRepository
       .createQueryBuilder()
       .update(Items)
-      .set({ name: name, description: description, price: price, image_link: image_link, material: material, size: size })
+      .set({
+        name: name,
+        description: description,
+        price: price,
+        image_link: image_link,
+        material: material,
+        size: size,
+      })
       .where('id =:id', { id: id })
       .execute();
   }
@@ -115,7 +122,7 @@ export class ItemsService {
       .from(Items)
       .where('id = :id', { id: id })
       .execute();
-    
+
     return await this.itemsDetailsService.deleteItemDetails(id);
   }
 }
