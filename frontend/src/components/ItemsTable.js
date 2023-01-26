@@ -10,14 +10,12 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { GiphyFetch } from "@giphy/js-fetch-api";
 import { Gif } from "@giphy/react-components";
 import { Box, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CreateIcon from "@mui/icons-material/Create";
 import { AppContext } from "../App";
-
-const giphyFetch = new GiphyFetch("ZZwspTwUirtTYIWRUtvgdijYFMZ1ZFc9");
+import { giphyFetch } from "../config/gifConfig";
 
 const GifComponent = ({ id }) => {
   const [gif, setGif] = useState(null);
@@ -147,7 +145,8 @@ const Row = ({ row, index }) => {
                   Lot number:{row.items_details.lot_number}
                 </Typography>
                 <Typography>
-                  Category:{row.categories.map((category) => category.name + " ")}
+                  Category:
+                  {row.categories.map((category) => category.name + " ")}
                 </Typography>
               </Box>
             </Box>

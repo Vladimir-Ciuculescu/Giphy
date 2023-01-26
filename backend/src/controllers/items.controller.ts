@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ItemDto } from 'src/dto/item.dto';
 import { SearchParamsDto } from 'src/dto/search_item.dto';
-import { AssignCategoryDto } from 'src/dto/assign_category.dto'
+import { AssignCategoryDto } from 'src/dto/assign_category.dto';
 import { ItemsService } from 'src/services/items.service';
 
 @Controller('items')
@@ -54,10 +54,10 @@ export class ItemsController {
     return await this.itemsService.addItem(addItemDto);
   }
 
-   //Add a category to item with IDs
+  //Add a category to item with IDs
   @Put()
   @UsePipes(ValidationPipe)
-  async assignItemCategory(@Body() assignCategoryDto : AssignCategoryDto) {
+  async assignItemCategory(@Body() assignCategoryDto: AssignCategoryDto) {
     return await this.itemsService.assignItemCategory(assignCategoryDto);
   }
 
