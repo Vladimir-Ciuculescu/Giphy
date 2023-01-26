@@ -6,6 +6,7 @@ import { getItemsApi } from "../services/api";
 import AddIcon from "@mui/icons-material/Add";
 import ItemModal from "./ItemModal";
 import { AppContext } from "../App";
+import CategoryModal from "./CategoryModal";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -52,7 +53,8 @@ const OptionsBar = ({ handleData }) => {
   const [serialNumber, setSerialNumber] = useState("");
   const [lotNumber, setLotNumber] = useState("");
 
-  const { openModal, setOpenModal, setModalMode } = useContext(AppContext);
+  const { openModal, setOpenModal, setModalMode, setOpenCategoryModal } =
+    useContext(AppContext);
 
   const handlePress = async (e) => {
     //If Enter key pressed
@@ -100,7 +102,7 @@ const OptionsBar = ({ handleData }) => {
   };
 
   return (
-    <Box sx={{ display: "fkex", flexDirection: "row" }}>
+    <Box sx={{ display: "fkex", flexDirection: "row", gap: 2 }}>
       <Search>
         <SearchIconWrapper>
           <SearchIcon />
@@ -145,7 +147,17 @@ const OptionsBar = ({ handleData }) => {
       >
         Add a new item
       </Button>
+
+      <Button
+        onClick={() => setOpenCategoryModal(true)}
+        sx={{ ml: 4 }}
+        variant="contained"
+        startIcon={<AddIcon />}
+      >
+        Add a new category
+      </Button>
       <ItemModal open={openModal} onClose={() => setOpenModal(false)} />
+      <CategoryModal />
     </Box>
   );
 };
