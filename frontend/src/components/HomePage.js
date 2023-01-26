@@ -1,13 +1,16 @@
 import { Grid, Typography } from "@mui/material";
 import { Container } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../App";
 import { getItemsApi } from "../services/api";
 import DeleteItemModal from "./DeleteItemModal";
 import ItemsTable from "./ItemsTable";
 import OptionsBar from "./OptionsBar";
 
 const HomePage = () => {
-  const [items, setItems] = useState([]);
+  //const [items, setItems] = useState([]);
+
+  const { items, setItems } = useContext(AppContext);
 
   useEffect(() => {
     const getItems = async () => {
