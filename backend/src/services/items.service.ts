@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AssignCategoryDto } from 'src/dto/assign_category.dto';
 import { ItemDto } from 'src/dto/item.dto';
+import { SearchParamsDto } from 'src/dto/search_item.dto';
 import { Items } from 'src/entities';
 import { Repository } from 'typeorm';
 
@@ -16,7 +17,7 @@ export class ItemsService {
     private readonly itemsDetailsService: ItemDetailsService,
   ) {}
 
-  async getItems(searchParams) {
+  async getItems(searchParams: SearchParamsDto) {
     const { name, serial_number, lot_number } = searchParams;
 
     const query = await this.itemsRepository
@@ -41,21 +42,10 @@ export class ItemsService {
     }
 
     return query.getMany();
-    // const items = await this.itemsRepository.find();
-    // return items;
   }
 
   async getItemById(id: number) {
     const item = await this.itemsRepository.findOneBy({ id: id });
-    return item;
-  }
-
-  async getItemByName(name) {
-    const item = await this.itemsRepository
-      .createQueryBuilder()
-      .where('LOWER(name) = LOWER(:name)', { name })
-      .getOne();
-
     return item;
   }
 
@@ -78,21 +68,13 @@ export class ItemsService {
     addedItem.material = material;
     addedItem.size = size;
     await addedItem.save();
-
-    // const itemData = await this.itemsRepository
-    //   .createQueryBuilder()
-    //   .insert()
-    //   .into(Items)
-    //   .values([{ name, description, price, image_link, material, size }])
-    //   .execute();
-
-    return await this.itemsDetailsService.addItemDetails(addedItem.id);
+    await this.itemsDetailsService.addItemDetails(addedItem.id);
   }
 
   async assignItemCategory(assignCategoryDto: AssignCategoryDto) {
     const { itemId, categoryId } = assignCategoryDto;
 
-    return await this.itemsRepository
+    await this.itemsRepository
       .createQueryBuilder()
       .relation(Items, 'categories')
       .of(itemId)
@@ -119,7 +101,9 @@ export class ItemsService {
       .where('id =:id', { id: id })
       .execute();
     
-    return await this.itemsDetailsService.updateItemDetails(id, itemDetails);
+    if (serial_number !== undefined || lot_number !== undefined) {
+      await this.itemsDetailsService.updateItemDetails(id, itemDetails);
+    } 
   }
 
   async deleteItem(id: number) {
@@ -130,6 +114,6 @@ export class ItemsService {
       .where('id = :id', { id: id })
       .execute();
 
-    return await this.itemsDetailsService.deleteItemDetails(id);
+    await this.itemsDetailsService.deleteItemDetails(id);
   }
 }
