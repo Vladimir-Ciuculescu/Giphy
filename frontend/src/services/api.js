@@ -13,46 +13,37 @@ export const getItemsApi = async (params) => {
 };
 
 export const addItemApi = async (item) => {
-  const addedItem = await axios.post("/items/add", item);
-  return addedItem;
+  await axios.post("/items/add", item);
 };
 
 export const editItemApi = async (id, item) => {
-  const editedItem = await axios.put(`/items/${id}`, item);
-  return editedItem;
+  await axios.put(`/items/${id}`, item);
 };
 
 export const deleteItemApi = async (id) => {
-  const deletedItem = await axios.delete(`items/${id}`);
-  return deletedItem;
+  await axios.delete(`items/${id}`);
 };
 
 export const getCategoriesApi = async () => {
-  const categories = await axios.get("/categories");
-  return categories;
+  return await axios.get("/categories");
 };
 
 export const addCategoryApi = async (category) => {
-  const addedCategory = await axios.post("/categories/add", category);
-  return addedCategory;
+  await axios.post("/categories/add", category);
 };
 
 export const deleteCategoryApi = async (id) => {
-  const deletedCategory = await axios.delete(`/categories/${id}`);
-  return deletedCategory;
+  await axios.delete(`/categories/${id}`);
 };
 
 export const updateCategoryApi = async (id, data) => {
-  const updatedCategory = await axios.put(`/categories/${id}`, data);
-  return updatedCategory;
+  await axios.put(`/categories/${id}`, data);
 };
 
 export const getAllCategoriesApi = async () => {
-  const response = await axios.get("/categories");
-  return response;
+  return await axios.get("/categories");
 };
 
 export const assignCategoryApi = async (ids) => {
-  const addedCategory = await axios.put("/items", ids);
-  return addedCategory;
+  await axios.put("/items", ids);
 };

@@ -4,9 +4,7 @@ import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import { getItemsApi } from "../services/api";
 import AddIcon from "@mui/icons-material/Add";
-import ItemModal from "./ItemModal";
 import { AppContext } from "../App";
-import CategoryModal from "./CategoryModal";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -38,7 +36,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -48,13 +45,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const OptionsBar = ({ handleData }) => {
+const OptionsBar = () => {
   const [name, setName] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
   const [lotNumber, setLotNumber] = useState("");
 
-  const { openModal, setOpenModal, setModalMode, setOpenCategoryModal } =
-    useContext(AppContext);
+  const {
+    openModal,
+    setOpenModal,
+    setModalMode,
+    setOpenCategoryModal,
+    setItems,
+  } = useContext(AppContext);
 
   const handlePress = async (e) => {
     //If Enter key pressed
@@ -93,7 +95,7 @@ const OptionsBar = ({ handleData }) => {
       lot_number: lotNumber,
     };
     const { data } = await getItemsApi(params);
-    handleData(data);
+    setItems(data);
   };
 
   const openAddModal = () => {
@@ -156,8 +158,6 @@ const OptionsBar = ({ handleData }) => {
       >
         Add a new category
       </Button>
-      <ItemModal open={openModal} onClose={() => setOpenModal(false)} />
-      <CategoryModal />
     </Box>
   );
 };
