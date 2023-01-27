@@ -13,18 +13,8 @@ export class ItemDetailsController {
     return await this.itemDetailsService.getItemDetails();
   }
 
-  @Post('/add')
-  async addItemDetails(id: number) {
-    return await this.itemDetailsService.addItemDetails(id);
-  }
-
   @Put('/:id')
   async updateItemDetails(@Param('id') id: number, @Body() itemDetailsDto: ItemDetailsDto) {
-    return await this.itemDetailsService.updateItemDetails(id, itemDetailsDto);
-  }
-
-  @Delete('/:id')
-  async deleteItemDetails(@Param('id') id: number) {
-    return await this.itemDetailsService.deleteItemDetails(id);
+    await this.itemDetailsService.updateItemDetails(id, itemDetailsDto);
   }
 }
