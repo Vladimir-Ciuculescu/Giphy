@@ -1,30 +1,25 @@
 import { Grid, Typography } from "@mui/material";
 import { Container } from "@mui/system";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { AppContext } from "../App";
 import { getItemsApi } from "../services/api";
+import CategoryModal from "./CategoryModal";
 import DeleteItemModal from "./DeleteItemModal";
+import ItemModal from "./ItemModal";
 import ItemsTable from "./ItemsTable";
 import OptionsBar from "./OptionsBar";
 
 const HomePage = () => {
-  //const [items, setItems] = useState([]);
-
   const { items, setItems } = useContext(AppContext);
 
   useEffect(() => {
     const getItems = async () => {
       const { data } = await getItemsApi({});
-
       setItems(data);
     };
 
     getItems();
   }, []);
-
-  const handleData = (e) => {
-    setItems(e);
-  };
 
   return (
     <Container maxWidth={false} sx={{ width: "85%", mt: 6 }}>
@@ -45,7 +40,7 @@ const HomePage = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <OptionsBar handleData={handleData} />
+          <OptionsBar />
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <ItemsTable items={items} />
@@ -59,6 +54,8 @@ const HomePage = () => {
         )}
       </Grid>
       <DeleteItemModal />
+      <CategoryModal />
+      <ItemModal />
     </Container>
   );
 };

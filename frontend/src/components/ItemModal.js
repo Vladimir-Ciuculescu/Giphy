@@ -12,12 +12,7 @@ import {
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import Textarea from "@mui/joy/Textarea";
-import {
-  addItemApi,
-  assignCategoryApi,
-  editItemApi,
-  getAllCategoriesApi,
-} from "../services/api";
+import { addItemApi, editItemApi, getAllCategoriesApi } from "../services/api";
 import { AppContext } from "../App";
 
 const sizes = [
@@ -36,8 +31,7 @@ const sizes = [
 ];
 
 const ItemModal = () => {
-  const { modalMode, item, setOpenModal, openModal, items, setItems } =
-    useContext(AppContext);
+  const { modalMode, item, setOpenModal, openModal } = useContext(AppContext);
   const [id, setId] = useState(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
@@ -49,7 +43,6 @@ const ItemModal = () => {
   const [serialNumber, setSerialNumber] = useState("");
   const [lotNumber, setLotNumber] = useState("");
   const [imageLink, setImageLink] = useState("");
-
 
   useEffect(() => {
     if (modalMode === "edit") {
@@ -63,10 +56,12 @@ const ItemModal = () => {
       setSerialNumber(item.items_details.serial_number);
       setLotNumber(item.items_details.lot_number);
       setImageLink(item.image_link);
-    } else {
-      clearForm();
     }
-  }, [openModal, modalMode]);
+
+    return () => {
+      clearForm();
+    };
+  }, [openModal]);
 
   useEffect(() => {
     getAllCategories();
@@ -75,10 +70,6 @@ const ItemModal = () => {
   const getAllCategories = async () => {
     const { data } = await getAllCategoriesApi();
     setCategoryList(data);
-  };
-
-  const handleChange = (e) => {
-    setCategory(e);
   };
 
   const clearForm = () => {
@@ -124,13 +115,13 @@ const ItemModal = () => {
     setOpenModal(false);
   };
 
-  const cancel = () => {
+  const closeModal = () => {
     clearForm();
     setOpenModal(false);
   };
 
   return (
-    <Dialog open={openModal} onClose={cancel}>
+    <Dialog open={openModal} onClose={closeModal}>
       <DialogTitle>
         {modalMode === "edit" ? "Edit item" : "Add a new item"}
       </DialogTitle>
@@ -204,7 +195,7 @@ const ItemModal = () => {
               <Select
                 multiple
                 value={category}
-                onChange={(e) => handleChange(e.target.value)}
+                onChange={(e) => setCategory(e.target.value)}
               >
                 {categoryList.map((cat) => (
                   <MenuItem key={cat.name} value={cat.name}>
@@ -232,7 +223,7 @@ const ItemModal = () => {
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={cancel}>Cancel</Button>
+        <Button onClick={closeModal}>Cancel</Button>
         {modalMode === "edit" ? (
           <Button onClick={editItem}>Save</Button>
         ) : (
