@@ -33,14 +33,6 @@ export class ItemsController {
     return item;
   }
 
-  //Get item by name (CASE SENSITIVE)
-  @Get('/search/name')
-  async getItemByName(@Body() body) {
-    const { name } = body;
-    const item = await this.itemsService.getItemByName(name);
-    return item;
-  }
-
   //Get all categories for an item with ID
   @Get('/:id/categories')
   async getItemCategories(@Param('id') id: number) {
@@ -51,25 +43,25 @@ export class ItemsController {
   @Post('/add')
   @UsePipes(ValidationPipe)
   async addItem(@Body() addItemDto: ItemDto) {
-    return await this.itemsService.addItem(addItemDto);
+    await this.itemsService.addItem(addItemDto);
   }
 
   //Add a category to item with IDs
   @Put()
   @UsePipes(ValidationPipe)
   async assignItemCategory(@Body() assignCategoryDto: AssignCategoryDto) {
-    return await this.itemsService.assignItemCategory(assignCategoryDto);
+    await this.itemsService.assignItemCategory(assignCategoryDto);
   }
 
   //Update an item after id with body data
   @Put('/:id')
   async updateItem(@Param('id') id: number, @Body() updateItemDto: ItemDto) {
-    return await this.itemsService.updateItem(id, updateItemDto);
+    await this.itemsService.updateItem(id, updateItemDto);
   }
 
   //Delete item after id
   @Delete('/:id')
   async deleteItem(@Param('id') id: number) {
-    return await this.itemsService.deleteItem(id);
+    await this.itemsService.deleteItem(id);
   }
 }

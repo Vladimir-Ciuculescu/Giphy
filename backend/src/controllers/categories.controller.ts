@@ -21,16 +21,16 @@ export class CategoriesController {
 
   @Post('/add')
   async addCategory(@Body() category: CategoryDto) {
-    return await this.categoriesService.addCategory(category);
+    await this.categoriesService.addCategory(category);
   }
 
   @Put('/:id')
-  async updateCategory(@Param('id') id: number, @Body() body) {
-    return await this.categoriesService.updateCategory(id, body);
+  async updateCategory(@Param('id') id: number, @Body() category: CategoryDto) {
+    await this.categoriesService.updateCategory(id, category);
   }
 
   @Delete('/:id')
   async deleteCategory(@Param('id') id: number) {
-    return await this.categoriesService.deleteCategory(id);
+    await this.categoriesService.deleteCategory(id);
   }
 }

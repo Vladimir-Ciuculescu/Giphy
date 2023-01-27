@@ -24,25 +24,18 @@ export class ItemDetailsService {
     itemDetails.serial_number = serial_number;
     itemDetails.lot_number = lot_number;
     await itemDetails.save();
-
-    return await this.itemDetailsRepository
+    
+    await this.itemDetailsRepository
       .createQueryBuilder()
       .relation(Items, 'items_details')
       .of(id)
       .set(itemDetails);
-
-    // return await this.itemDetailsRepository
-    //   .createQueryBuilder()
-    //   .insert()
-    //   .into(Item_Details)
-    //   .values([{ serial_number, lot_number }])
-    //   .execute();
   }
 
   async updateItemDetails(id: number, itemDetailsDto: ItemDetailsDto) {
     const { serial_number, lot_number } = itemDetailsDto;
 
-    return await this.itemDetailsRepository
+    await this.itemDetailsRepository
       .createQueryBuilder()
       .update(Item_Details)
       .set({ serial_number: serial_number, lot_number: lot_number })
@@ -51,7 +44,7 @@ export class ItemDetailsService {
   }
 
   async deleteItemDetails(id: number) {
-    return await this.itemDetailsRepository
+    await this.itemDetailsRepository
       .createQueryBuilder()
       .delete()
       .from(Item_Details)
