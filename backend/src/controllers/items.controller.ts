@@ -14,6 +14,7 @@ import { ItemDto } from 'src/dto/item.dto';
 import { SearchParamsDto } from 'src/dto/search_item.dto';
 import { AssignCategoryDto } from 'src/dto/assign_category.dto';
 import { ItemsService } from 'src/services/items.service';
+import { UpdateItemDto } from 'src/dto/update_item_dto';
 
 @Controller('items')
 export class ItemsController {
@@ -55,7 +56,10 @@ export class ItemsController {
 
   //Update an item after id with body data
   @Put('/:id')
-  async updateItem(@Param('id') id: number, @Body() updateItemDto: ItemDto) {
+  async updateItem(
+    @Param('id') id: number,
+    @Body() updateItemDto: UpdateItemDto,
+  ) {
     await this.itemsService.updateItem(id, updateItemDto);
   }
 

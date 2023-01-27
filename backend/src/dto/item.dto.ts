@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { size_enum } from 'src/entities/item.entity';
+import { CategoryDto } from './category.dto';
 
 export class ItemDto {
   @IsNotEmpty()
@@ -25,4 +26,7 @@ export class ItemDto {
 
   @IsOptional()
   lot_number: string;
+
+  @IsOptional()
+  categories: CategoryDto[];
 }

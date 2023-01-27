@@ -17,7 +17,7 @@ export enum size_enum {
   large = 'large',
 }
 
-@Entity({ name: 'items'})
+@Entity({ name: 'items' })
 export class Items extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -52,7 +52,7 @@ export class Items extends BaseEntity {
   })
   categories: Categories[];
 
-  @OneToOne(() => Item_Details, { cascade: true})
+  @OneToOne(() => Item_Details, { cascade: true })
   @JoinColumn({ name: 'item_id' })
   items_details: Item_Details;
 }

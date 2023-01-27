@@ -3,8 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AssignCategoryDto } from 'src/dto/assign_category.dto';
 import { ItemDto } from 'src/dto/item.dto';
 import { SearchParamsDto } from 'src/dto/search_item.dto';
+import { UpdateItemDto } from 'src/dto/update_item_dto';
 import { Items } from 'src/entities';
 import { Repository } from 'typeorm';
+import { CategoriesService } from './categories.service';
 
 import { ItemDetailsService } from './item_details.service';
 
@@ -15,6 +17,8 @@ export class ItemsService {
     private readonly itemsRepository: Repository<Items>,
     @Inject(ItemDetailsService)
     private readonly itemsDetailsService: ItemDetailsService,
+    @Inject(CategoriesService)
+    private readonly categoriesService: CategoriesService,
   ) {}
 
   async getItems(searchParams: SearchParamsDto) {
@@ -23,7 +27,7 @@ export class ItemsService {
     const query = await this.itemsRepository
       .createQueryBuilder('items')
       .leftJoinAndSelect('items.items_details', 'items_details')
-      .leftJoinAndSelect('items.categories', 'categories')
+      .leftJoinAndSelect('items.categories', 'categories');
 
     if (name) {
       query.andWhere('items.name = :name', { name });
@@ -57,6 +61,13 @@ export class ItemsService {
       .getOne();
   }
 
+  async getAllItemCategories(id) {
+    return await this.itemsRepository
+      .createQueryBuilder('items_categories')
+      .where('items_categories.item_id = :id', { id })
+      .getMany();
+  }
+
   async addItem(item: ItemDto) {
     const { name, description, price, image_link, material, size } = item;
 
@@ -81,8 +92,21 @@ export class ItemsService {
       .add(categoryId);
   }
 
-  async updateItem(id: number, item: ItemDto) {
-    const { name, description, price, image_link, material, size, serial_number, lot_number } = item;
+  async updateItem(id: number, data: UpdateItemDto) {
+    const { item, categories } = data;
+
+    console.log(categories);
+
+    const {
+      name,
+      description,
+      price,
+      image_link,
+      material,
+      size,
+      serial_number,
+      lot_number,
+    } = item;
     const itemDetails = {
       serial_number: serial_number,
       lot_number: lot_number,
@@ -100,10 +124,16 @@ export class ItemsService {
       })
       .where('id =:id', { id: id })
       .execute();
-    
+
+    const itemCategories = await this.getItemCategories(id);
+    console.log('1111', itemCategories);
+
+    const Categories = await this.getAllItemCategories(id);
+    console.log('2222', Categories);
+
     if (serial_number !== undefined || lot_number !== undefined) {
       await this.itemsDetailsService.updateItemDetails(id, itemDetails);
-    } 
+    }
   }
 
   async deleteItem(id: number) {

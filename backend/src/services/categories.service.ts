@@ -17,12 +17,12 @@ export class CategoriesService {
 
   async addCategory(category: CategoryDto) {
     const { name, description } = category;
-    await this.categoriesRepository
-      .createQueryBuilder()
-      .insert()
-      .into(Categories)
-      .values([{ name: name, description: description }])
-      .execute();
+
+    const addedCategory = new Categories();
+    addedCategory.name = name;
+    addedCategory.description = description;
+
+    return await addedCategory.save();
   }
 
   async updateCategory(id: number, category: CategoryDto) {
