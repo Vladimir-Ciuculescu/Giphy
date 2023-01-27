@@ -55,7 +55,7 @@ const CategoryModal = () => {
 
     setCategories((oldCategories) => [
       ...oldCategories,
-      { ...category, id: data.identifiers[0].id },
+      { ...category, id: data.id },
     ]);
 
     clearForm();

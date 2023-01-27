@@ -16,8 +16,8 @@ export const addItemApi = async (item) => {
   await axios.post("/items/add", item);
 };
 
-export const editItemApi = async (id, item) => {
-  await axios.put(`/items/${id}`, item);
+export const editItemApi = async (id, item, categories) => {
+  await axios.put(`/items/${id}`, { item, categories });
 };
 
 export const deleteItemApi = async (id) => {
@@ -29,7 +29,7 @@ export const getCategoriesApi = async () => {
 };
 
 export const addCategoryApi = async (category) => {
-  await axios.post("/categories/add", category);
+  return await axios.post("/categories/add", category);
 };
 
 export const deleteCategoryApi = async (id) => {

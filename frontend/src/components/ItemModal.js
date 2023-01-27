@@ -31,7 +31,8 @@ const sizes = [
 ];
 
 const ItemModal = () => {
-  const { modalMode, item, setOpenModal, openModal } = useContext(AppContext);
+  const { modalMode, item, setOpenModal, openModal, setItems, items } =
+    useContext(AppContext);
   const [id, setId] = useState(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
@@ -39,7 +40,7 @@ const ItemModal = () => {
   const [size, setSize] = useState("");
   const [description, setDescription] = useState("");
   const [categoryList, setCategoryList] = useState([]);
-  const [category, setCategory] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [serialNumber, setSerialNumber] = useState("");
   const [lotNumber, setLotNumber] = useState("");
   const [imageLink, setImageLink] = useState("");
@@ -52,7 +53,7 @@ const ItemModal = () => {
       setMaterial(item.material);
       setSize(item.size);
       setDescription(item.description);
-      setCategory(item.categories.map((cat) => cat.name));
+      setCategories(item.categories.map((cat) => cat.name));
       setSerialNumber(item.items_details.serial_number);
       setLotNumber(item.items_details.lot_number);
       setImageLink(item.image_link);
@@ -69,6 +70,7 @@ const ItemModal = () => {
 
   const getAllCategories = async () => {
     const { data } = await getAllCategoriesApi();
+
     setCategoryList(data);
   };
 
@@ -78,7 +80,7 @@ const ItemModal = () => {
     setMaterial("");
     setSize("");
     setDescription("");
-    setCategory([]);
+    setCategories([]);
     setSerialNumber("");
     setLotNumber("");
     setImageLink("");
@@ -94,6 +96,9 @@ const ItemModal = () => {
       image_link: imageLink,
     };
     await addItemApi(item);
+
+    //setItems([...items, {}])
+
     clearForm();
     setOpenModal(false);
   };
@@ -110,7 +115,35 @@ const ItemModal = () => {
       serial_number: serialNumber,
       lot_number: lotNumber,
     };
-    await editItemApi(id, item);
+
+    const categoriesToSend = categoryList.filter((categoryItem) =>
+      categories.includes(categoryItem.name)
+    );
+
+    await editItemApi(id, item, categoriesToSend);
+
+    setItems(
+      items.map((item) =>
+        item.id !== id
+          ? item
+          : {
+              ...item,
+              name,
+              description,
+              material,
+              price,
+              size,
+              image_link: imageLink,
+              categories: categoriesToSend,
+              items_details: {
+                id,
+                lot_number: lotNumber,
+                serial_number: serialNumber,
+              },
+            }
+      )
+    );
+
     clearForm();
     setOpenModal(false);
   };
@@ -118,6 +151,10 @@ const ItemModal = () => {
   const closeModal = () => {
     clearForm();
     setOpenModal(false);
+  };
+
+  const handleCategory = (e) => {
+    setCategories(e);
   };
 
   return (
@@ -194,12 +231,12 @@ const ItemModal = () => {
             <Grid item md={12} mb={2}>
               <Select
                 multiple
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                value={categories}
+                onChange={(e) => handleCategory(e.target.value)}
               >
-                {categoryList.map((cat) => (
-                  <MenuItem key={cat.name} value={cat.name}>
-                    {cat.name}
+                {categoryList.map((category) => (
+                  <MenuItem key={category.id} value={category.name}>
+                    {category.name}
                   </MenuItem>
                 ))}
               </Select>
